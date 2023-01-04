@@ -6,28 +6,32 @@ const items = ref([
     name: 'アボカドソースバケット',
     description: '刻んだ野菜をアボカドと混ぜ、優しいソースに。こんがり焼いたバゲットとお召し上がりください。',
     price: 320,
-    image: '/images/item1.jpg'
+    image: '/images/item1.jpg',
+    soldOut: false,
   },
   {
     id: 2,
     name: 'あの日見たホットケーキ',
     description: '子供の頃に食べたかった、あのホットケーキを再現しました。素朴でどこか懐かしい味をどうぞ。',
     price: 1180,
-    image: '/images/item2.jpg'
+    image: '/images/item2.jpg',
+    soldOut: false,
   },
   {
     id: 3,
     name: 'HOP WTR',
     description: 'ロサンゼルス生まれのスパーリングウォーター。ノンカロリー。ノンアルコールの新感覚飲料です。',
     price: 320,
-    image: '/images/item3.jpg'
+    image: '/images/item3.jpg',
+    soldOut: true,
   },
   {
     id: 4,
     name: 'チーズフレンチフライ',
     description: 'イタリア産のチーズをたっぷりかけた熱々のフレンチフライ。みんな大好きな一品です。',
     price: 670,
-    image: '/images/item4.jpg'
+    image: '/images/item4.jpg',
+    soldOut: false,
   }
 ])
 </script>
@@ -39,7 +43,7 @@ const items = ref([
   </header>
   <main class="main">
     <template v-for="(item, index) in items" :key="item.id">
-      <div class="item">
+      <div class="item" v-if="!item.soldOut">
         <div class="thumbnail">
           <img :src="item.image" alt="" class="">
         </div>
@@ -49,6 +53,7 @@ const items = ref([
           <span>¥<span class="price">{{ item.price }}</span></span>
         </div>
       </div>
+      <div v-else>売り切れです</div>
     </template>
   </main>
 </template>
