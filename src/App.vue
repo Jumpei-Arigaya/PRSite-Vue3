@@ -34,6 +34,22 @@ const items = ref([
     soldOut: false,
   }
 ])
+
+// 価格を３桁ごとのカンマ付きで返す
+const pricePrefix = (price) => {
+  return price.toLocaleString();
+}
+
+// 在庫のある商品数を返す
+const stockQuantity = () => {
+  return items.value.filter(item => item.soldOut === false).length
+}
+
+// 商品の在庫状況を変更する
+const stockItem = (item) => {
+  item.soldOut = false;
+}
+
 </script>
 
 <template>
@@ -41,6 +57,7 @@ const items = ref([
     <img src="/images/logo.svg" alt="" class="">
     <h1 class="">Vue.Js ハンズオン</h1>
   </header>
+  <div>商品数:{{ stockQuantity() }}</div>
   <main class="main">
     <template v-for="(item, index) in items" :key="item.id">
       <div class="item" v-if="!item.soldOut">
@@ -50,10 +67,10 @@ const items = ref([
         <div class="description">
           <h2>{{ index }}{{ item.name }}</h2>
           <p>{{ item.description }}</p>
-          <span>¥<span class="price">{{ item.price }}</span></span>
+          <span>¥<span class="price">{{ pricePrefix(item.price) }}</span></span>
         </div>
       </div>
-      <div v-else>売り切れです</div>
+      <div v-else>売り切れです<button type="button" @click="stockItem(item)">入荷</button></div>
     </template>
   </main>
 </template>
