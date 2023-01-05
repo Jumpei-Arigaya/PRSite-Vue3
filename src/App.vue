@@ -8,6 +8,7 @@ const items = ref([
     price: 320,
     image: '/images/item1.jpg',
     soldOut: false,
+    selected: false,
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ const items = ref([
     price: 1180,
     image: '/images/item2.jpg',
     soldOut: false,
+    selected: false,
   },
   {
     id: 3,
@@ -24,6 +26,7 @@ const items = ref([
     price: 320,
     image: '/images/item3.jpg',
     soldOut: true,
+    selected: false,
   },
   {
     id: 4,
@@ -32,6 +35,7 @@ const items = ref([
     price: 670,
     image: '/images/item4.jpg',
     soldOut: false,
+    selected: false,
   }
 ])
 
@@ -64,7 +68,7 @@ const getDateComputed = computed(() => {
   const computedDate = new Date();
   return computedDate;
 })
-
+console.log(items)
 </script>
 
 <template>
@@ -77,7 +81,8 @@ const getDateComputed = computed(() => {
   <div>現在時刻:{{ getDateComputed }}(computed)</div>
   <main class="main">
     <template v-for="(item, index) in items" :key="item.id">
-      <div class="item" v-if="!item.soldOut">
+      <div class="item" v-if="!item.soldOut" :class="{ 'selected-item': item.selected }"
+        @keyup.enter="item.selected = !item.selected" @click="item.selected = !item.selected" tabindex="0">
         <div class="thumbnail">
           <img :src="item.image" alt="" class="">
         </div>
@@ -159,5 +164,9 @@ body {
 .item>div.discription>span>.price {
   font-size: 28px;
   font-weight: bold;
+}
+
+.selected-item {
+  background-color: #e3f2fd;
 }
 </style>
