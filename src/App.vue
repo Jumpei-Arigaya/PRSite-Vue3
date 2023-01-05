@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import Card from './components/Card.vue'
 const items = ref([
   {
     id: 1,
@@ -25,7 +26,7 @@ const items = ref([
     description: 'ロサンゼルス生まれのスパーリングウォーター。ノンカロリー。ノンアルコールの新感覚飲料です。',
     price: 320,
     image: '/images/item3.jpg',
-    soldOut: true,
+    soldOut: false,
     selected: false,
   },
   {
@@ -38,11 +39,6 @@ const items = ref([
     selected: false,
   }
 ])
-
-// 価格を３桁ごとのカンマ付きで返す
-const pricePrefix = (price) => {
-  return price.toLocaleString();
-}
 
 // 在庫のある商品数を返す　関数
 // const stockQuantity = () => {
@@ -58,17 +54,23 @@ const stockItem = (item) => {
   item.soldOut = false;
 }
 
-//現在時刻を表示する
+//現在時刻を表示する 関数
 const getDate = () => {
   const date = new Date();
   return date;
 }
 
+//現在時刻を表示する 算出プロパティ
 const getDateComputed = computed(() => {
   const computedDate = new Date();
   return computedDate;
 })
-console.log(items)
+
+const changeSoldOut = (id) => {
+  const pickElm = items.value.find(item => item.id == id)
+  pickElm.soldOut = true;
+}
+
 </script>
 
 <template>
@@ -83,14 +85,8 @@ console.log(items)
     <template v-for="(item, index) in items" :key="item.id">
       <div class="item" v-if="!item.soldOut" :class="{ 'selected-item': item.selected }"
         @keyup.enter="item.selected = !item.selected" @click="item.selected = !item.selected" tabindex="0">
-        <div class="thumbnail">
-          <img :src="item.image" alt="" class="">
-        </div>
-        <div class="description">
-          <h2>{{ index }}{{ item.name }}</h2>
-          <p>{{ item.description }}</p>
-          <span>¥<span class="price">{{ pricePrefix(item.price) }}</span></span>
-        </div>
+        <Card :id="item.id" :image="item.image" :name="item.name" :description="item.description" :price="item.price"
+          @sold-out="changeSoldOut" />
       </div>
       <div v-else>売り切れです<button type="button" @click="stockItem(item)">入荷</button></div>
     </template>
@@ -140,30 +136,6 @@ body {
 .item:hover {
   transition: 0.2s transform ease-out;
   transform: scale(1.05);
-}
-
-.item>div.thumbnail>img {
-  width: 100%;
-  height: calc(100%);
-  object-fit: cover;
-}
-
-.item>div.description>p {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  font-size: 18px;
-  line-height: 25px;
-}
-
-.item>div.description>span {
-  display: block;
-  margin-top: 10px;
-  font-size: 20px;
-}
-
-.item>div.discription>span>.price {
-  font-size: 28px;
-  font-weight: bold;
 }
 
 .selected-item {
