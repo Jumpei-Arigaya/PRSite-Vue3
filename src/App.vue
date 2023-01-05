@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 const items = ref([
   {
     id: 1,
@@ -40,24 +40,41 @@ const pricePrefix = (price) => {
   return price.toLocaleString();
 }
 
-// 在庫のある商品数を返す
-const stockQuantity = () => {
+// 在庫のある商品数を返す　関数
+// const stockQuantity = () => {
+//   return items.value.filter(item => item.soldOut === false).length
+// }
+// 在庫のある商品数を返す 算出プロパティ
+const stockQuantityComputed = computed(() => {
   return items.value.filter(item => item.soldOut === false).length
-}
+})
 
-// 商品の在庫状況を変更する
+// 商品の在庫状況を変更する 関数
 const stockItem = (item) => {
   item.soldOut = false;
 }
+
+//現在時刻を表示する
+const getDate = () => {
+  const date = new Date();
+  return date;
+}
+
+const getDateComputed = computed(() => {
+  const computedDate = new Date();
+  return computedDate;
+})
 
 </script>
 
 <template>
   <header class="header">
     <img src="/images/logo.svg" alt="" class="">
-    <h1 class="">Vue.Js ハンズオン</h1>
+    <h1 class="">商品データ管理ページ</h1>
   </header>
-  <div>商品数:{{ stockQuantity() }}</div>
+  <div>商品数:{{ stockQuantityComputed }}</div>
+  <div>現在時刻:{{ getDate() }}</div>
+  <div>現在時刻:{{ getDateComputed }}(computed)</div>
   <main class="main">
     <template v-for="(item, index) in items" :key="item.id">
       <div class="item" v-if="!item.soldOut">
@@ -85,7 +102,7 @@ body {
 
 #app {
   width: 90%;
-  margin: 0 5%;
+  margin: 10px 5%;
   color: #242424;
 }
 
@@ -100,7 +117,7 @@ body {
   font-weight: bold;
   line-height: 80px;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 20px;
 }
 
 .main {
